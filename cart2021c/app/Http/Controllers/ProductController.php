@@ -81,4 +81,9 @@ class ProductController extends Controller
             return view('productDetail')->with('products',$products);
     }
 
+    public function viewProduct(){
+        $products=Product::all();
+
+        return view('viewProducts')->with('products',$products);
+    }
 }
