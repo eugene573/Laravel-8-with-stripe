@@ -9,32 +9,41 @@ use Auth;
 use App\Models\myCart;
 use App\Models\Product;
 
+
 class CartController extends Controller
 {
-    
     public function __construct(){
-        $this->middleware('auth'); 		
+        $this->middleware('auth');
     }
-
+    
     public function add(){
         $r=request();
-        $addCart=myCart::Create([
+
+        $addCart=myCart::create([
             'productID'=>$r->productID,
             'quantity'=>$r->quantity,
             'userID'=>Auth::id(),
             'orderID'=>'',
         ]);
-        Return redirect()->route('show.my.cart');
+        Session::flash('success',"Product added into Cart!");
+        return redirect()->route('show.my.cart');
     }
 
     public function showMyCart(){
         $carts=DB::table('my_carts')
         ->leftjoin('products','products.id','=','my_carts.productID')
-        ->select('my_carts.quantity as cartQTY','my_carts.id as cid', 'products.*')
-        ->where('my_carts.orderID','=','')//if '' means haven't make payment
-        ->where('my_carts.userID','=',Auth::id()) //item match with current login user
+        ->select('my_carts.quantity as cartQTY','my_carts.id as cid','products.*')
+        ->where('my_carts.orderID','=','') //if '' means no payment made
+        ->where('my_carts.userID','=',Auth::id())
         ->get();
-
         return view('myCart')->with('carts',$carts);
+    }
+
+    public function delete($id){
+        $delete=myCart::find($id);
+        $delete->delete();
+
+        Session::flash('success',"Product was deleted successfully!");
+        return redirect()->route('show.my.cart');
     }
 }
