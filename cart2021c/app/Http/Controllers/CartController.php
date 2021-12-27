@@ -33,15 +33,16 @@ class CartController extends Controller
         $carts=DB::table('my_carts')
         ->leftjoin('products','products.id','=','my_carts.productID')
         ->select('my_carts.quantity as cartQTY','my_carts.id as cid','products.*')
-        ->where('my_carts.orderID','=','') //if '' means no payment made
-        ->where('my_carts.userID','=',Auth::id())
-        ->get();
+        ->where('my_carts.orderID','=','') //if '' means havent make payment
+        ->where('my_carts.userID','=',Auth::id()) //item match with current login user
+        ->paginate(5); //5 = five items in one page
+
         return view('myCart')->with('carts',$carts);
     }
 
     public function delete($id){
-        $delete=myCart::find($id);
-        $delete->delete();
+        $delete=myCart::find($id); //binding record
+        $delete->delete(); //delete record
 
         Session::flash('success',"Product was deleted successfully!");
         return redirect()->route('show.my.cart');

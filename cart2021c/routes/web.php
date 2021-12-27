@@ -49,6 +49,9 @@ name('updateProduct');
 Route::get('/viewProduct',[App\Http\Controllers\ProductController::class,'viewProduct'])->
 name('viewProduct');
 
+Route::get('/myOrder',[App\Http\Controllers\PaymentController::class,'viewOrder'])->
+name('myOrder');
+
 Route::get('/productDetail/{id}',[App\Http\Controllers\ProductController::class,'productdetail'])->
 name('product.detail');
 
@@ -61,7 +64,9 @@ name('show.my.cart');
 Route::get('/deleteCart/{id}',[App\Http\Controllers\CartController::class,'delete'])->
 name('delete.cart.item');
 
-Route::post('\checkout', [App\Http\Controllers\PaymentController::class, 'paymentPost'])->name('payment.post');
+Route::post('/checkout', [App\Http\Controllers\PaymentController::class, 'paymentPost'])->name('payment.post');
+
+Route::post('/products',[App\Http\Controllers\ProductController::class, 'searchProduct'] ) ->name('search.product');
 
 Auth::routes();
 
