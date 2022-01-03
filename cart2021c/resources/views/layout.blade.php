@@ -36,7 +36,7 @@
           Category
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Phone</a>
+          <a class="dropdown-item" href="{{route('phone.products')}}">Phone</a>
           <a class="dropdown-item" href="#">Desktops/Laptop</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Computer Hardware</a>
@@ -48,9 +48,20 @@
       <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>&nbsp;
-    <button type="button" class="btn btn-success">
-      My Cart <span class="badge bg-danger">1</span>
+    @guest
+    <button type="button" class="btn btn-success" onclick="window.location.href='{{route('show.my.cart')}}'">
+      My Cart
     </button>
+    @else  
+    <button type="button" class="btn btn-success" onclick="window.location.href='{{route('show.my.cart')}}'">
+      My Cart 
+    <span class="badge bg-danger">
+      @foreach($noItem as $c)
+        {{ $c->count_item }}
+      @endforeach
+    </span>
+    </button>
+    @endguest
   </div>
 </nav>
 
