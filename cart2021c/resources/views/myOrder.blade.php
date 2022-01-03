@@ -24,9 +24,9 @@
                     @endforeach
                 </tbody>
             </table>
-        <br><br>
+       </div> 
+          <a href="{{route('pdfReport')}}" class="btn btn-info btn-xs">Download Report</a>
     </div>
     <div class="col-sm-2"></div>
 </div>
-
 @endsection
