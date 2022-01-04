@@ -104,5 +104,4 @@ class ProductController extends Controller
         $products=DB::table('products')->where('CategoryID','=','2')->orWhere('CategoryID','=','3')->get();
         return view('viewProduct')->with('products',$products);
     }
-
 }

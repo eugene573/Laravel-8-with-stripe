@@ -1,3 +1,8 @@
+<?php
+use App\Models\Product;
+$cartCount = Product::cartCount();
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -37,7 +42,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{route('phone.products')}}">Phone</a>
-          <a class="dropdown-item" href="#">Desktops/Laptop</a>
+          <a class="dropdown-item" href="{{route('computer.products')}}">Desktops/Laptop</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Computer Hardware</a>
         </div>
@@ -56,8 +61,8 @@
     <button type="button" class="btn btn-success" onclick="window.location.href='{{route('show.my.cart')}}'">
       My Cart 
     <span class="badge bg-danger">
-      @foreach($noItem as $c)
-        {{ $c->count_item }}
+      @foreach($cartCount as $count)
+        {{$count}}
       @endforeach
     </span>
     </button>
@@ -66,8 +71,6 @@
 </nav>
 
 @yield('content')
-
-
 
  <!-- footer -->
  <!-- Footer -->
