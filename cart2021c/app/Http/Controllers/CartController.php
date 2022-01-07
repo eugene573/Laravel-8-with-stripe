@@ -16,6 +16,7 @@ class CartController extends Controller
         $this->middleware('auth');
     }
     
+
     public function add(){
         $r=request();
 
@@ -49,8 +50,8 @@ class CartController extends Controller
     }
 
     public function delete($id){
-        $delete=myCart::find($id); //binding record
-        $delete->delete(); //delete record
+        $deleteItem=myCart::find($id); //binding record
+        $deleteItem->delete(); //delete record
 
         Session::flash('success',"Product was deleted successfully!");
         return redirect()->route('show.my.cart');
