@@ -14,9 +14,9 @@ class CategoryController extends Controller
         $this->middleware('auth');
     }
 
-    /*public function index(){
+     public function index(){
       return view('addCategory');
-    }*/
+    }
 
     public function add(){
         $r=request();  //received the data by GET or POST mothod 
