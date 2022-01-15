@@ -57,7 +57,7 @@ name('delete.cart.item');
 
 Route::post('/checkout', [App\Http\Controllers\PaymentController::class, 'paymentPost'])->name('payment.post');
 
-Route::post('/products',[App\Http\Controllers\ProductController::class, 'searchProduct'] ) ->name('search.product');
+Route::post('/Viewproduct',[App\Http\Controllers\ProductController::class, 'searchProduct'] ) ->name('search.product');
 
 Route::get('/pdfReport',[App\Http\Controllers\PDFController::class,'pdfReport'])->name('pdfReport');
 

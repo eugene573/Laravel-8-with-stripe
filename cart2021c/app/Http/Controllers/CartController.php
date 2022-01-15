@@ -9,51 +9,60 @@ use Auth;
 use App\Models\myCart;
 use App\Models\Product;
 
-
 class CartController extends Controller
 {
+    
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('auth'); 		
     }
+
     
 
     public function add(){
         $r=request();
-
-        $addCart=myCart::create([
+        $addCart=myCart::Create([
             'productID'=>$r->productID,
             'quantity'=>$r->quantity,
             'userID'=>Auth::id(),
             'orderID'=>'',
         ]);
-        Session::flash('success',"Product added into Cart!");
-        return redirect()->route('show.my.cart');
+        Return redirect()->route('show.my.cart');
     }
 
     public function showMyCart(){
         $carts=DB::table('my_carts')
         ->leftjoin('products','products.id','=','my_carts.productID')
-        ->select('my_carts.quantity as cartQTY','my_carts.id as cid','products.*')
-        ->where('my_carts.orderID','=','') //if '' means havent make payment
+        ->select('my_carts.quantity as cartQTY','my_carts.id as cid', 'products.*')
+        ->where('my_carts.orderID','=','')//if '' means haven't make payment
         ->where('my_carts.userID','=',Auth::id()) //item match with current login user
-        ->paginate(5); //5 = five items in one page
-     
-        $noItem=DB::table('my_carts')
-        ->leftjoin('products','products.id','=','my_carts.productID')
-        ->select(DB::raw('COUNT(*) as count_item'))
-        ->where('my_carts.orderID','=','') //if '' means havent make payment
-        ->where('my_carts.userID','=',Auth::id()) //item match with current login user
-        ->groupBy('my_carts.userID')
-        ->get();
+        //->get();       
+        ->paginate(5);//5 = five items in one page
 
-        return view('myCart')->with('carts',$carts)->with('noItem',$noItem);
+        $this->cartItem(); //call function calculate no. cart item
+       
+        return view('myCart')->with('carts',$carts);
     }
 
     public function delete($id){
         $deleteItem=myCart::find($id); //binding record
-        $deleteItem->delete(); //delete record
+        $deleteItem->delete();//delete record
+        Session::flash('success','Item was remove successfully!');
+        Return redirect()->route('show.my.cart');
+    }
 
-        Session::flash('success',"Product was deleted successfully!");
-        return redirect()->route('show.my.cart');
+    public function cartItem(){
+        $cartItem=0;
+        $noItem=DB::table('my_carts')
+        ->leftjoin('products','products.id','=','my_carts.productID')
+        ->select(DB::raw('COUNT(*) as count_item'))
+        ->where('my_carts.orderID','=','')//if '' means haven't make payment
+        ->where('my_carts.userID','=',Auth::id()) //item match with current login user
+        ->groupBy('my_carts.userID')
+        ->first();
+         if($noItem){
+            $cartItem=$noItem->count_item;
+         }
+
+        Session()->put('cartItem',$cartItem);//assign value to session variable cartItem
     }
 }
